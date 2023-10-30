@@ -60,7 +60,7 @@ T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="a
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('ticket') }}" class="nav-link" <i class="fa-solid fa-ticket"></i>
+                            <a href="{{ url('ticket') }}" class="nav-link"> <i class="fa-solid fa-ticket"></i>
                                 <p> Ticket</p>
                             </a>
                         </li>
