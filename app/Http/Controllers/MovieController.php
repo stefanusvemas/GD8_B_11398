@@ -42,12 +42,23 @@ class MovieController extends Controller
             'title' => 'required',
             'director' => 'required',
             'duration' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg',
         ]);
-        Movie::create([
-            'title' => $request->title,
-            'director' => $request->director,
-            'duration' => $request->duration
-        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('public/images'), $imageName);
+            $imagePath = 'public/images/' . $imageName;
+
+
+            Movie::create([
+                'title' => $request->title,
+                'director' => $request->director,
+                'duration' => $request->duration,
+                'image' => $imagePath,
+            ]);
+        }
         try {
             return redirect()->route('movie.index');
         } catch (Exception $e) {
@@ -80,13 +91,33 @@ class MovieController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'director' => 'required',
-            'duration' => 'required'
+            'duration' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg'
         ]);
-        $movie->update([
-            'title' => $request->title,
-            'director' => $request->director,
-            'duration' => $request->duration
-        ]);
+
+        if ($request->hasFile('image')) {
+            // Store the new image and update the movie's image path
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('public/images'), $imageName);
+            $imagePath = 'public/images/' . $imageName;
+
+
+            $movie->update([
+                'title' => $request->title,
+                'director' => $request->director,
+                'duration' => $request->duration,
+                'image' => $imagePath,
+            ]);
+        } else {
+            $movie->update([
+                'title' => $request->title,
+                'director' => $request->director,
+                'duration' => $request->duration,
+            ]);
+        }
+
+
         return redirect()->route('movie.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
